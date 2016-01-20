@@ -1,13 +1,13 @@
 Package: rstatscn
 Type: Package
 Title: R Interface for China National Data
-Version: 1.0
+Version: 1.0.1
 Date: 2015-11-24
 Author: Xuehui YANG
 Maintainer: Xuehui YANG <jianghang@bagualu.net>
 Description: R interface for china national data http://data.stats.gov.cn/, some convenient functions for accessing the national data are provided.
 Depends: R (>= 3.2.2) 
-Imports: httr, jsonlite
+Imports: httr(>=1.0.0), jsonlite(>=0.9.19)
 URL: http://www.bagualu.net/
 BugReports: http://www.bagualu.net/wordpress/rstatscn-the-r-interface-for-china-national-data
 Repository: CRAN
