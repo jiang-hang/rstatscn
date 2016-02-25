@@ -55,7 +55,7 @@ genDfwds<-function(wdcode,valuecode)
 #' @return return nothing , but if it finds some error , it stop the script
 checkHttpStatus<-function(ret)
 {
-  if (http_status(ret)$category != "success") {
+  if (http_status(ret)$category != "Success") {
     stop(sprintf("Bad response from %s", statscnbase))
   }
 }
