@@ -1,3 +1,10 @@
+## rstatscn 1.1.1
+
+### bug fixes
+
+* for some pages, the row name is duplicated. need to set the row name prefix to fix the issue.
+to set the row name prefix , use the function statscnRowNamePrefix() , to unset it
+call statscnRowNamePrefix(NULL)
 
 ## rstatscn 1.0.2
 
