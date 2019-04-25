@@ -1,3 +1,9 @@
+## rstatscn 1.1.3
+
+### minor update
+
+* import the functions from httr and jsonlite
+
 ## rstatscn 1.1.2
 
 ### minor update

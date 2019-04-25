@@ -1,6 +1,13 @@
 library(jsonlite)
 library(httr)
 
+
+#' @import httr
+NULL
+
+#' @import jsonlite
+NULL
+
 statscnbase<-'http://data.stats.gov.cn/easyquery.htm'
 rstatscnEnv<-new.env()
 assign('prefix',NULL, envir=rstatscnEnv)

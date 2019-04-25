@@ -1,7 +1,7 @@
 Package: rstatscn
 Type: Package
 Title: R Interface for China National Data
-Version: 1.1.2
+Version: 1.1.3
 Date: 2019-04-25
 Author: Xuehui YANG
 Maintainer: Xuehui YANG <jianghang@bagualu.net>
