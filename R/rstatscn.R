@@ -130,8 +130,10 @@ dataJson2df<-function(rawObj,rowcode,colcode)
 #' @return the data frame with the sub zbs/categories , if the given zbid is not a Parent zb/category, null list is returned
 #' @export 
 #' @examples 
+#' \dontrun{
 #'  statscnQueryZb()
 #'  statscnQueryZb('A01',dbcode="hgnd")
+#' }
 statscnQueryZb<-function(zbid="zb",dbcode="hgnd")
 {
 	curQuery=list(id=zbid,dbcode=dbcode,wdcode="zb",m="getTree")
@@ -148,9 +150,11 @@ statscnQueryZb<-function(zbid="zb",dbcode="hgnd")
 #' @return the data frame with all the available region codes and names in the db
 #' @export 
 #' @examples 
+#' \dontrun{
 #'  statscnRegions('fsnd')
 #'  statscnRegions('csnd')
 #'  statscnRegions('gjnd')
+#' }
 statscnRegions<-function(dbcode='fsnd')
 {
         curQuery<-list(
@@ -187,9 +191,11 @@ statscnRegions<-function(dbcode='fsnd')
 #' @return the data frame you are quering
 #' @export 
 #' @examples 
+#' \dontrun{
 #' df=statscnQueryData('A0201',dbcode='hgnd')
 #' df=statscnQueryData('A0201',dbcode='fsnd',rowcode='zb',colcode='sj',
 #'                     moreWd=list(name='reg',value='110000'))
+#' }
 statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',moreWd=list(name=NA,value=NA))
 {
         curQuery<-list(
@@ -215,8 +221,10 @@ statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',mo
 #' @return the last n rows data in the latest query
 #' @export 
 #' @examples 
+#' \dontrun{
 #' df=statscnQueryData('A0201',dbcode='hgnd')
 #' df2=statscnQueryLastN(20)
+#' }
 statscnQueryLastN<-function(n)
 {
 	wdcode="sj"	

@@ -20,4 +20,3 @@ return the queyr string for the http request
 \description{
 private function for constructing the query parameter for dfwds
 }
-

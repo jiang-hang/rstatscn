@@ -19,4 +19,3 @@ the contructed data frame
 \description{
 private function to convert the returned jason data to a dataframe
 }
-

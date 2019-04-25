@@ -29,8 +29,9 @@ the data frame you are quering
 the main function for querying the statscn database, it will retrieve the data from specified db and orginize the data in a data frame.
 }
 \examples{
+\dontrun{
 df=statscnQueryData('A0201',dbcode='hgnd')
 df=statscnQueryData('A0201',dbcode='fsnd',rowcode='zb',colcode='sj',
                     moreWd=list(name='reg',value='110000'))
 }
-
+}

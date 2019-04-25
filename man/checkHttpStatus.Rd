@@ -15,4 +15,3 @@ return nothing , but if it finds some error , it stop the script
 \description{
 private function for check the http status
 }
-

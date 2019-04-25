@@ -15,4 +15,3 @@ the available dbs in the national db
 \examples{
  statscnDbs()
 }
-

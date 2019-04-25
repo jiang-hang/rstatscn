@@ -16,8 +16,9 @@ the data frame with all the available region codes and names in the db
 the available regions in the specified db, it is used for query the province, city and country code generally
 }
 \examples{
+\dontrun{
  statscnRegions('fsnd')
  statscnRegions('csnd')
  statscnRegions('gjnd')
 }
-
+}

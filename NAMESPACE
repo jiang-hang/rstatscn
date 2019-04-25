@@ -6,6 +6,3 @@ export(statscnQueryLastN)
 export(statscnQueryZb)
 export(statscnRegions)
 export(statscnRowNamePrefix)
-
-import(httr)
-import(jsonlite)
