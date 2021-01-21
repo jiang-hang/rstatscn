@@ -83,14 +83,19 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         #dataStructure
 	#jj is a list
         #jj[[1]] = 200 #return code
-        #jj[[2]] is datanode
-        #jj[[2]][[1]] is data
-        #jj[[2]][[2]] is description
-        #jj[[2]][[2]][,"nodes"][[1]] is row description , it is a dataframe
-        #jj[[2]][[2]][,"nodes"][[2]] is col description , it is a dataframe
-        desList=ret[[2]][[2]][,'nodes']
-	rowWdIdx = which(ret[[2]][[2]]$wdcode == rowcode) 
-	colWdIdx = which(ret[[2]][[2]]$wdcode == colcode) 
+        #jj[[2]] is returndata
+	returnData = "returndata"
+        #jj[[2]][[1]] is datanodes
+	dataNodes = "datanodes"
+        #jj[[2]][[2]] is freshsort
+	      #jj[[2]][[3]] is data
+        #jj[[2]][[4]] is wdnodes (description)
+	descriptionNodes = "wdnodes"
+        #jj[[2]][[4]][,"nodes"][[1]] is row description , it is a dataframe
+        #jj[[2]][[4]][,"nodes"][[2]] is col description , it is a dataframe
+        desList=ret[[returnData]][[descriptionNodes]][,'nodes']
+	rowWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == rowcode) 
+	colWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == colcode) 
         rowDes=desList[[rowWdIdx]]
         colDes=desList[[colWdIdx]]
 
@@ -119,7 +124,7 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         myret=as.data.frame(matrix(rep(NA,rowNum*colNum),nrow=rowNum))
         rownames(myret)=rowCodes
         colnames(myret)=colCodes
-        dfdata=ret[[2]][[1]]
+        dfdata=ret[[returnData]][[dataNodes]]
         for (k in seq(1,nrow(dfdata))) {
 		wddf=dfdata[k,"wds"][[1]]
 		myret[wddf[rowWdIdx,'valuecode'],wddf[colWdIdx,'valuecode']] = dfdata[k,'data'][1,'data']
