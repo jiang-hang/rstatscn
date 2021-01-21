@@ -27,18 +27,31 @@ milSec<-function()
 #' the available dbs
 #' 
 #' the available dbs in the national db
-#' @return a data frame with 2 columns , one is the dbcode, another is the db description 
+#' @return a data frame with 3 columns , first is the dbcode, second is the db description, third is the db description in Chinese
 #' @export 
 #' @examples 
 #'  statscnDbs()
 statscnDbs<-function()
 {
-	dbs <- c("hgnd","hgjd","hgyd","fsnd","fsjd","fsyd","csnd","csyd","gjnd","gjyd","gjydsdj")
-	dbnames <- c("national data, yearly","national data,  quaterly","national data, monthly",
-		     "province data, yearly","province data, quaterly","province data, monthly",
-                     "city data, yearly","city data, monthly", "international data, yearly", 
-                     "international data, monthly","3 main countries data, monthly")
-	ret=data.frame(dbcode=dbs,description=dbnames)
+	dbs <- c("hgnd","hgjd","hgyd",
+	         "fsnd","fsjd","fsyd",
+	         "csnd","csyd",
+	         "gatnd","gatyd",
+	         "gjnd","gjyd",
+	         "gjydsdj","gjydsc")
+	dbnames <- c("national data, yearly","national data, quarterly","national data, monthly",
+		     "province data, yearly","province data, quarterly","province data, monthly",
+                     "city data, yearly","city data, monthly",
+		     "Hong Kong, Macao, Taiwan data, yearly", "Hong Kong, Macao, Taiwan data, monthly",
+		     "international data, yearly", "international data, monthly",
+		     "3 main countries data, monthly", "international market commodity prices, monthly")
+	dbnameschinese <- c("宏观年度","宏观季度","宏观月度",
+	                    "分省年度","分省季度","分省月度",
+	                    "城市年度","城市月度",
+	                    "港澳台年度","港澳台月度",
+	                    "国际年度","国际月度",
+	                    "三大经济体月度","国际市场月度商品价格")
+	ret=data.frame(dbcode=dbs,description=dbnames,description_zh=dbnameschinese)
 	return(ret)
 }
 

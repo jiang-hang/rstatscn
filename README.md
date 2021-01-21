@@ -81,18 +81,21 @@ github page: https://github.com/jiang-hang/rstatscn
 ```R
 > library(rstatscn)
 > statscnDbs()
-    dbcode                    description
-1     hgnd          national data, yearly   #宏观年度数据
-2     hgjd       national data,  quaterly   #宏观季度
-3     hgyd         national data, monthly   #宏观月度
-4     fsnd          province data, yearly   #分省年度
-5     fsjd        province data, quaterly   #分省季度
-6     fsyd         province data, monthly   #分省月度
-7     csnd              city data, yearly   #城市年度
-8     csyd             city data, monthly   #城市月度
-9     gjnd     international data, yearly   #国际年度
-10    gjyd    international data, monthly   #国际月度
-11 gjydsdj 3 main countries data, monthly   #三个主要国家月度数据
+    dbcode                                    description       description_zh
+1     hgnd                          national data, yearly             宏观年度
+2     hgjd                       national data, quarterly             宏观季度
+3     hgyd                         national data, monthly             宏观月度
+4     fsnd                          province data, yearly             分省年度
+5     fsjd                       province data, quarterly             分省季度
+6     fsyd                         province data, monthly             分省月度
+7     csnd                              city data, yearly             城市年度
+8     csyd                             city data, monthly             城市月度
+9    gatnd          Hong Kong, Macao, Taiwan data, yearly           港澳台年度
+10   gatyd         Hong Kong, Macao, Taiwan data, monthly           港澳台月度
+11    gjnd                     international data, yearly             国际年度
+12    gjyd                    international data, monthly             国际月度
+13 gjydsdj                 3 main countries data, monthly       三大经济体月度
+14  gjydsc international market commodity prices, monthly 国际市场月度商品价格
 ```
 ```R
 > statscnQueryZb(dbcode='hgnd')
