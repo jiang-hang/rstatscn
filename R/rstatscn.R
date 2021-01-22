@@ -9,7 +9,6 @@ NULL
 NULL
 
 statscnbase<-'https://data.stats.gov.cn/easyquery.htm'
-set_config(config(ssl_verifypeer = FALSE))
 rstatscnEnv<-new.env()
 assign('prefix',NULL, envir=rstatscnEnv)
 
