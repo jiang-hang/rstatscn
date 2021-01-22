@@ -8,7 +8,7 @@ NULL
 #' @import jsonlite
 NULL
 
-statscnbase<-'http://data.stats.gov.cn/easyquery.htm'
+statscnbase<-'https://data.stats.gov.cn/easyquery.htm'
 rstatscnEnv<-new.env()
 assign('prefix',NULL, envir=rstatscnEnv)
 
@@ -26,18 +26,31 @@ milSec<-function()
 #' the available dbs
 #' 
 #' the available dbs in the national db
-#' @return a data frame with 2 columns , one is the dbcode, another is the db description 
+#' @return a data frame with 3 columns , first is the dbcode, second is the db description, third is the db description in Chinese
 #' @export 
 #' @examples 
 #'  statscnDbs()
 statscnDbs<-function()
 {
-	dbs <- c("hgnd","hgjd","hgyd","fsnd","fsjd","fsyd","csnd","csyd","gjnd","gjyd","gjydsdj")
-	dbnames <- c("national data, yearly","national data,  quaterly","national data, monthly",
-		     "province data, yearly","province data, quaterly","province data, monthly",
-                     "city data, yearly","city data, monthly", "international data, yearly", 
-                     "international data, monthly","3 main countries data, monthly")
-	ret=data.frame(dbcode=dbs,description=dbnames)
+	dbs <- c("hgnd","hgjd","hgyd",
+	         "fsnd","fsjd","fsyd",
+	         "csnd","csyd",
+	         "gatnd","gatyd",
+	         "gjnd","gjyd",
+	         "gjydsdj","gjydsc")
+	dbnames <- c("national data, yearly","national data, quarterly","national data, monthly",
+		     "province data, yearly","province data, quarterly","province data, monthly",
+                     "city data, yearly","city data, monthly",
+		     "Hong Kong, Macao, Taiwan data, yearly", "Hong Kong, Macao, Taiwan data, monthly",
+		     "international data, yearly", "international data, monthly",
+		     "3 main countries data, monthly", "international market commodity prices, monthly")
+	dbnameschinese <- c("宏观年度","宏观季度","宏观月度",
+	                    "分省年度","分省季度","分省月度",
+	                    "城市年度","城市月度",
+	                    "港澳台年度","港澳台月度",
+	                    "国际年度","国际月度",
+	                    "三大经济体月度","国际市场月度商品价格")
+	ret=data.frame(dbcode=dbs,description=dbnames,description_zh=dbnameschinese)
 	return(ret)
 }
 
@@ -82,14 +95,19 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         #dataStructure
 	#jj is a list
         #jj[[1]] = 200 #return code
-        #jj[[2]] is datanode
-        #jj[[2]][[1]] is data
-        #jj[[2]][[2]] is description
-        #jj[[2]][[2]][,"nodes"][[1]] is row description , it is a dataframe
-        #jj[[2]][[2]][,"nodes"][[2]] is col description , it is a dataframe
-        desList=ret[[2]][[2]][,'nodes']
-	rowWdIdx = which(ret[[2]][[2]]$wdcode == rowcode) 
-	colWdIdx = which(ret[[2]][[2]]$wdcode == colcode) 
+        #jj[[2]] is returndata
+	returnData = "returndata"
+        #jj[[2]][[1]] is datanodes
+	dataNodes = "datanodes"
+        #jj[[2]][[2]] is freshsort
+	      #jj[[2]][[3]] is data
+        #jj[[2]][[4]] is wdnodes (description)
+	descriptionNodes = "wdnodes"
+        #jj[[2]][[4]][,"nodes"][[1]] is row description , it is a dataframe
+        #jj[[2]][[4]][,"nodes"][[2]] is col description , it is a dataframe
+        desList=ret[[returnData]][[descriptionNodes]][,'nodes']
+	rowWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == rowcode) 
+	colWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == colcode) 
         rowDes=desList[[rowWdIdx]]
         colDes=desList[[colWdIdx]]
 
@@ -118,7 +136,7 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         myret=as.data.frame(matrix(rep(NA,rowNum*colNum),nrow=rowNum))
         rownames(myret)=rowCodes
         colnames(myret)=colCodes
-        dfdata=ret[[2]][[1]]
+        dfdata=ret[[returnData]][[dataNodes]]
         for (k in seq(1,nrow(dfdata))) {
 		wddf=dfdata[k,"wds"][[1]]
 		myret[wddf[rowWdIdx,'valuecode'],wddf[colWdIdx,'valuecode']] = dfdata[k,'data'][1,'data']
