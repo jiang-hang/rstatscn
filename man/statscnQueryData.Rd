@@ -4,8 +4,14 @@
 \alias{statscnQueryData}
 \title{query data in the statscn db}
 \usage{
-statscnQueryData(zb = "A0201", dbcode = "hgnd", rowcode = "zb",
-  colcode = "sj", moreWd = list(name = NA, value = NA))
+statscnQueryData(
+  zb = "A0201",
+  dbcode = "hgnd",
+  rowcode = "zb",
+  colcode = "sj",
+  moreWd = list(name = NA, value = NA),
+  lang = "zh"
+)
 }
 \arguments{
 \item{zb}{the zb/category code to be queried}
@@ -21,6 +27,8 @@ where the name should be one of c("reg","sj") , which stand for region and sj/ti
 the valuecode for reg should be the region code queried by statscnRegions()
 the valuecode for sj should be like '2014' for *nd , '2014C' for *jd , '201405' for *yd.
 Be noted that , the moreWd name should be different with either rowcode or colcode}
+
+\item{lang}{string value, one of c("zh","en")}
 }
 \value{
 the data frame you are quering

@@ -4,12 +4,14 @@
 \alias{statscnQueryZb}
 \title{the data categories}
 \usage{
-statscnQueryZb(zbid = "zb", dbcode = "hgnd")
+statscnQueryZb(zbid = "zb", dbcode = "hgnd", lang = "zh")
 }
 \arguments{
 \item{zbid}{the father zb/category id , the root id is 'zb'}
 
 \item{dbcode}{which db will be queried}
+
+\item{lang}{string value, one of c("zh","en")}
 }
 \value{
 the data frame with the sub zbs/categories , if the given zbid is not a Parent zb/category, null list is returned

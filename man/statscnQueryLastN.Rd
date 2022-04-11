@@ -4,10 +4,12 @@
 \alias{statscnQueryLastN}
 \title{fetch the lastN data}
 \usage{
-statscnQueryLastN(n)
+statscnQueryLastN(n, lang = "zh")
 }
 \arguments{
 \item{n}{the number of rows to be fetched}
+
+\item{lang}{string value, one of c("zh","en")}
 }
 \value{
 the last n rows data in the latest query
