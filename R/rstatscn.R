@@ -44,12 +44,12 @@ statscnDbs<-function()
 		     "Hong Kong, Macao, Taiwan data, yearly", "Hong Kong, Macao, Taiwan data, monthly",
 		     "international data, yearly", "international data, monthly",
 		     "3 main countries data, monthly", "international market commodity prices, monthly")
-	dbnameschinese <- c("宏观年度","宏观季度","宏观月度",
-	                    "分省年度","分省季度","分省月度",
-	                    "城市年度","城市月度",
-	                    "港澳台年度","港澳台月度",
-	                    "国际年度","国际月度",
-	                    "三大经济体月度","国际市场月度商品价格")
+	dbnameschinese <- c("\u5B8F\u89C2\u5E74\u5EA6","\u5B8F\u89C2\u5B63\u5EA6","\u5B8F\u89C2\u6708\u5EA6",# "宏观年度","宏观季度","宏观月度",
+	                    "\u5206\u7701\u5E74\u5EA6","\u5206\u7701\u5B63\u5EA6","\u5206\u7701\u6708\u5EA6",# "分省年度","分省季度","分省月度",
+	                    "\u57CE\u5E02\u5E74\u5EA6","\u57CE\u5E02\u6708\u5EA6",# "城市年度","城市月度",
+	                    "\u6E2F\u6FB3\u53F0\u5E74\u5EA6","\u6E2F\u6FB3\u53F0\u6708\u5EA6",# "港澳台年度","港澳台月度",
+	                    "\u56FD\u9645\u5E74\u5EA6","\u56FD\u9645\u6708\u5EA6",# "国际年度","国际月度",
+	                    "\u4E09\u5927\u7ECF\u6D4E\u4F53\u6708\u5EA6","\u56FD\u9645\u5E02\u573A\u6708\u5EA6\u5546\u54C1\u4EF7\u683C")# "三大经济体月度","国际市场月度商品价格"
 	ret=data.frame(dbcode=dbs,description=dbnames,description_zh=dbnameschinese)
 	return(ret)
 }
