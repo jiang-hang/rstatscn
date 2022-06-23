@@ -4,10 +4,12 @@
 \alias{statscnRegions}
 \title{the regions in db}
 \usage{
-statscnRegions(dbcode = "fsnd")
+statscnRegions(dbcode = "fsnd", lang = "zh")
 }
 \arguments{
 \item{dbcode}{the dbcode should be some province db(fs*) , city db(cs*) or internaltional db(gj*)}
+
+\item{lang}{string value, one of c("zh","en")}
 }
 \value{
 the data frame with all the available region codes and names in the db

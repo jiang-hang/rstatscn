@@ -7,7 +7,7 @@
 statscnDbs()
 }
 \value{
-a data frame with 2 columns , one is the dbcode, another is the db description
+a data frame with 3 columns , first is the dbcode, second is the db description, third is the db description in Chinese
 }
 \description{
 the available dbs in the national db

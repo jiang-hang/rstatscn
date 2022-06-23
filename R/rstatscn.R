@@ -8,9 +8,22 @@ NULL
 #' @import jsonlite
 NULL
 
-statscnbase<-'http://data.stats.gov.cn/easyquery.htm'
-rstatscnEnv<-new.env()
+statscnbase<-'https://data.stats.gov.cn/easyquery.htm'
+statscnbaseEn<-'https://data.stats.gov.cn/english/easyquery.htm'
+rstatscnEnv<-new.env(parent = emptyenv())
 assign('prefix',NULL, envir=rstatscnEnv)
+
+#' getQueryURL
+#'
+#' @param lang string value, one of c("zh","en") 
+#' @return url
+getQueryURL <- function(lang){
+  if (lang == "en"){
+    return(statscnbaseEn)
+  } else {
+    return(statscnbase)
+  }
+}
 
 #' private function for sec
 #' 
@@ -26,18 +39,31 @@ milSec<-function()
 #' the available dbs
 #' 
 #' the available dbs in the national db
-#' @return a data frame with 2 columns , one is the dbcode, another is the db description 
+#' @return a data frame with 3 columns , first is the dbcode, second is the db description, third is the db description in Chinese
 #' @export 
 #' @examples 
 #'  statscnDbs()
 statscnDbs<-function()
 {
-	dbs <- c("hgnd","hgjd","hgyd","fsnd","fsjd","fsyd","csnd","csyd","gjnd","gjyd","gjydsdj")
-	dbnames <- c("national data, yearly","national data,  quaterly","national data, monthly",
-		     "province data, yearly","province data, quaterly","province data, monthly",
-                     "city data, yearly","city data, monthly", "international data, yearly", 
-                     "international data, monthly","3 main countries data, monthly")
-	ret=data.frame(dbcode=dbs,description=dbnames)
+	dbs <- c("hgnd","hgjd","hgyd",
+	         "fsnd","fsjd","fsyd",
+	         "csnd","csyd",
+	         "gatnd","gatyd",
+	         "gjnd","gjyd",
+	         "gjydsdj","gjydsc")
+	dbnames <- c("national data, yearly","national data, quarterly","national data, monthly",
+		     "province data, yearly","province data, quarterly","province data, monthly",
+                     "city data, yearly","city data, monthly",
+		     "Hong Kong, Macao, Taiwan data, yearly", "Hong Kong, Macao, Taiwan data, monthly",
+		     "international data, yearly", "international data, monthly",
+		     "3 main countries data, monthly", "international market commodity prices, monthly")
+	dbnameschinese <- c("\u5B8F\u89C2\u5E74\u5EA6","\u5B8F\u89C2\u5B63\u5EA6","\u5B8F\u89C2\u6708\u5EA6",# "宏观年度","宏观季度","宏观月度",
+	                    "\u5206\u7701\u5E74\u5EA6","\u5206\u7701\u5B63\u5EA6","\u5206\u7701\u6708\u5EA6",# "分省年度","分省季度","分省月度",
+	                    "\u57CE\u5E02\u5E74\u5EA6","\u57CE\u5E02\u6708\u5EA6",# "城市年度","城市月度",
+	                    "\u6E2F\u6FB3\u53F0\u5E74\u5EA6","\u6E2F\u6FB3\u53F0\u6708\u5EA6",# "港澳台年度","港澳台月度",
+	                    "\u56FD\u9645\u5E74\u5EA6","\u56FD\u9645\u6708\u5EA6",# "国际年度","国际月度",
+	                    "\u4E09\u5927\u7ECF\u6D4E\u4F53\u6708\u5EA6","\u56FD\u9645\u5E02\u573A\u6708\u5EA6\u5546\u54C1\u4EF7\u683C")# "三大经济体月度","国际市场月度商品价格"
+	ret=data.frame(dbcode=dbs,description=dbnames,description_zh=dbnameschinese)
 	return(ret)
 }
 
@@ -82,14 +108,19 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         #dataStructure
 	#jj is a list
         #jj[[1]] = 200 #return code
-        #jj[[2]] is datanode
-        #jj[[2]][[1]] is data
-        #jj[[2]][[2]] is description
-        #jj[[2]][[2]][,"nodes"][[1]] is row description , it is a dataframe
-        #jj[[2]][[2]][,"nodes"][[2]] is col description , it is a dataframe
-        desList=ret[[2]][[2]][,'nodes']
-	rowWdIdx = which(ret[[2]][[2]]$wdcode == rowcode) 
-	colWdIdx = which(ret[[2]][[2]]$wdcode == colcode) 
+        #jj[[2]] is returndata
+	returnData = "returndata"
+        #jj[[2]][[1]] is datanodes
+	dataNodes = "datanodes"
+        #jj[[2]][[2]] is freshsort
+	      #jj[[2]][[3]] is data
+        #jj[[2]][[4]] is wdnodes (description)
+	descriptionNodes = "wdnodes"
+        #jj[[2]][[4]][,"nodes"][[1]] is row description , it is a dataframe
+        #jj[[2]][[4]][,"nodes"][[2]] is col description , it is a dataframe
+        desList=ret[[returnData]][[descriptionNodes]][,'nodes']
+	rowWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == rowcode) 
+	colWdIdx = which(ret[[returnData]][[descriptionNodes]]$wdcode == colcode) 
         rowDes=desList[[rowWdIdx]]
         colDes=desList[[colWdIdx]]
 
@@ -118,7 +149,7 @@ dataJson2df<-function(rawObj,rowcode,colcode)
         myret=as.data.frame(matrix(rep(NA,rowNum*colNum),nrow=rowNum))
         rownames(myret)=rowCodes
         colnames(myret)=colCodes
-        dfdata=ret[[2]][[1]]
+        dfdata=ret[[returnData]][[dataNodes]]
         for (k in seq(1,nrow(dfdata))) {
 		wddf=dfdata[k,"wds"][[1]]
 		myret[wddf[rowWdIdx,'valuecode'],wddf[colWdIdx,'valuecode']] = dfdata[k,'data'][1,'data']
@@ -134,6 +165,7 @@ dataJson2df<-function(rawObj,rowcode,colcode)
 #' statscnDbs(). In the returned data frame, the column 'isParent' shows if each sub category is leap category or not
 #' @param zbid the father zb/category id , the root id is 'zb'
 #' @param dbcode which db will be queried
+#' @param lang string value, one of c("zh","en") 
 #' @return the data frame with the sub zbs/categories , if the given zbid is not a Parent zb/category, null list is returned
 #' @export 
 #' @examples 
@@ -141,10 +173,10 @@ dataJson2df<-function(rawObj,rowcode,colcode)
 #'  statscnQueryZb()
 #'  statscnQueryZb('A01',dbcode="hgnd")
 #' }
-statscnQueryZb<-function(zbid="zb",dbcode="hgnd")
+statscnQueryZb<-function(zbid="zb",dbcode="hgnd",lang="zh")
 {
 	curQuery=list(id=zbid,dbcode=dbcode,wdcode="zb",m="getTree")
-	yy<-POST(statscnbase,body=curQuery,encode="form")
+	yy<-POST(getQueryURL(lang=lang),body=curQuery,encode="form")
 	assign('lastQuery',curQuery, envir=rstatscnEnv)
         checkHttpStatus(yy)
         jj=fromJSON(content(yy,"text",encoding="utf-8"))
@@ -154,6 +186,7 @@ statscnQueryZb<-function(zbid="zb",dbcode="hgnd")
 #' 
 #' the available regions in the specified db, it is used for query the province, city and country code generally
 #' @param dbcode the dbcode should be some province db(fs*) , city db(cs*) or internaltional db(gj*)
+#' @param lang string value, one of c("zh","en") 
 #' @return the data frame with all the available region codes and names in the db
 #' @export 
 #' @examples 
@@ -162,7 +195,7 @@ statscnQueryZb<-function(zbid="zb",dbcode="hgnd")
 #'  statscnRegions('csnd')
 #'  statscnRegions('gjnd')
 #' }
-statscnRegions<-function(dbcode='fsnd')
+statscnRegions<-function(dbcode='fsnd',lang="zh")
 {
         curQuery<-list(
 		m="getOtherWds",
@@ -173,7 +206,7 @@ statscnRegions<-function(dbcode='fsnd')
 		#dfwds="[]",
 		k1=milSec()
 	)
-        yy<-GET(statscnbase, query=curQuery)
+        yy<-GET(getQueryURL(lang=lang), query=curQuery)
 	assign('lastQuery',curQuery, envir=rstatscnEnv)
         checkHttpStatus(yy)
         ret=fromJSON(content(yy,"text",encoding="utf-8"))
@@ -195,6 +228,7 @@ statscnRegions<-function(dbcode='fsnd')
 #'        the valuecode for reg should be the region code queried by statscnRegions()
 #'        the valuecode for sj should be like '2014' for *nd , '2014C' for *jd , '201405' for *yd.
 #'        Be noted that , the moreWd name should be different with either rowcode or colcode
+#' @param lang string value, one of c("zh","en") 
 #' @return the data frame you are quering
 #' @export 
 #' @examples 
@@ -203,7 +237,7 @@ statscnRegions<-function(dbcode='fsnd')
 #' df=statscnQueryData('A0201',dbcode='fsnd',rowcode='zb',colcode='sj',
 #'                     moreWd=list(name='reg',value='110000'))
 #' }
-statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',moreWd=list(name=NA,value=NA))
+statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',moreWd=list(name=NA,value=NA),lang="zh")
 {
         curQuery<-list(
 		m="QueryData",
@@ -214,7 +248,7 @@ statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',mo
 		dfwds=genDfwds("zb",zb),
 		k1=milSec()
 	)
-        yy<-GET(statscnbase, query=curQuery)
+        yy<-GET(getQueryURL(lang=lang), query=curQuery)
 	assign('lastQuery',curQuery, envir=rstatscnEnv)
         checkHttpStatus(yy)
         ret=fromJSON(content(yy,"text",encoding="utf-8"))
@@ -225,6 +259,7 @@ statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',mo
 #' fetch the lastN data for the latest query, only affect the number of rows in the returned data.
 #' This function can not be used alone , statscnQueryData() has to be called before this function
 #' @param n the number of rows to be fetched
+#' @param lang string value, one of c("zh","en") 
 #' @return the last n rows data in the latest query
 #' @export 
 #' @examples 
@@ -232,7 +267,7 @@ statscnQueryData<-function(zb="A0201",dbcode="hgnd",rowcode='zb',colcode='sj',mo
 #' df=statscnQueryData('A0201',dbcode='hgnd')
 #' df2=statscnQueryLastN(20)
 #' }
-statscnQueryLastN<-function(n)
+statscnQueryLastN<-function(n, lang="zh")
 {
 	wdcode="sj"	
 	valuecode=paste("LAST",n,sep="")
@@ -243,7 +278,7 @@ statscnQueryLastN<-function(n)
 	if( curQuery$m=="QueryData" ) {
 		curQuery$dfwds=genDfwds(wdcode,valuecode)
 	}
-        yy<-GET(statscnbase, query=curQuery)
+        yy<-GET(getQueryURL(lang=lang), query=curQuery)
 	assign('lastQuery',curQuery, envir=rstatscnEnv)
         checkHttpStatus(yy)
         ret=fromJSON(content(yy,"text",encoding="utf-8"))
